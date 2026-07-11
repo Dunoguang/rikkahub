@@ -15,11 +15,9 @@ import me.rerere.rikkahub.data.datastore.getCurrentAssistant
 import me.rerere.rikkahub.data.model.Assistant
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.time.LocalDateTime
 import java.time.temporal.Temporal
 import java.util.Locale
 import java.util.TimeZone
@@ -29,6 +27,7 @@ data class PlaceholderCtx(
     val settingsStore: SettingsStore,
     val model: Model,
     val assistant: Assistant,
+    val requestStartTime: LocalDateTime = LocalDateTime.now(),
 )
 
 interface PlaceholderProvider {
@@ -61,15 +60,15 @@ fun buildPlaceholders(block: PlaceholderBuilder.() -> Unit): Map<String, Placeho
 object DefaultPlaceholderProvider : PlaceholderProvider {
     override val placeholders: Map<String, PlaceholderInfo> = buildPlaceholders {
         placeholder("cur_date", { Text(stringResource(R.string.placeholder_current_date)) }) {
-            LocalDate.now().toDateString()
+            it.requestStartTime.toDateString()
         }
 
         placeholder("cur_time", { Text(stringResource(R.string.placeholder_current_time)) }) {
-            LocalTime.now().toTimeString()
+            it.requestStartTime.toTimeString()
         }
 
         placeholder("cur_datetime", { Text(stringResource(R.string.placeholder_current_datetime)) }) {
-            LocalDateTime.now().toDateTimeString()
+            it.requestStartTime.toDateTimeString()
         }
 
         placeholder("model_id", { Text(stringResource(R.string.placeholder_model_id)) }) {
@@ -168,7 +167,8 @@ object PlaceholderTransformer : InputMessageTransformer, KoinComponent {
             context = ctx.context,
             settingsStore = settingsStore,
             model = ctx.model,
-            assistant = ctx.assistant
+            assistant = ctx.assistant,
+            requestStartTime = ctx.requestStartTime
         )
         defaultProvider.placeholders.forEach { (key, placeholderInfo) ->
             val value = placeholderInfo.resolver(ctx)
