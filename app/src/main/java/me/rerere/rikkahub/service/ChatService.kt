@@ -516,7 +516,7 @@ class ChatService(
                 },
                 assistant = assistant,
                 conversationSystemPrompt = conversation.customSystemPrompt,
-                conversationStartTime = conversation.createAt.toJavaLocalDateTime(),
+                conversationStartTime = conversation.currentMessages.firstOrNull()?.createdAt?.toJavaLocalDateTime(),
                 conversationModeInjectionIds = conversation.modeInjectionIds,
                 conversationLorebookIds = conversation.lorebookIds,
                 workspaceCwd = conversation.workspaceCwd,
