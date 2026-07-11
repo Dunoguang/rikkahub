@@ -10,7 +10,8 @@ import kotlin.uuid.Uuid
 
 import java.time.LocalDateTime
 class TransformerContext(
-    val requestStartTime: LocalDateTime = LocalDateTime.now(),
+    val conversationStartTime: LocalDateTime? = null,
+    val requestStartTime: LocalDateTime = conversationStartTime ?: LocalDateTime.now(),
     val context: Context,
     val model: Model,
     val assistant: Assistant,
@@ -69,6 +70,7 @@ suspend fun List<UIMessage>.transforms(
     model: Model,
     assistant: Assistant,
     settings: Settings,
+    conversationStartTime: LocalDateTime? = null,
     conversationModeInjectionIds: Set<Uuid> = emptySet(),
     conversationLorebookIds: Set<Uuid> = emptySet(),
     processingStatus: MutableStateFlow<String?> = MutableStateFlow(null),
@@ -79,6 +81,7 @@ suspend fun List<UIMessage>.transforms(
         model = model,
         assistant = assistant,
         settings = settings,
+        conversationStartTime = conversationStartTime,
         conversationModeInjectionIds = conversationModeInjectionIds,
         conversationLorebookIds = conversationLorebookIds,
         processingStatus = processingStatus,

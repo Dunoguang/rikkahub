@@ -41,6 +41,7 @@ import me.rerere.rikkahub.data.ai.transformers.transforms
 import me.rerere.rikkahub.data.ai.transformers.visualTransforms
 import me.rerere.rikkahub.data.ai.tools.buildMemoryTools
 import me.rerere.rikkahub.data.datastore.Settings
+import java.time.LocalDateTime
 import me.rerere.rikkahub.data.datastore.findModelById
 import me.rerere.rikkahub.data.datastore.findProvider
 import me.rerere.rikkahub.data.model.Assistant
@@ -79,6 +80,7 @@ class GenerationHandler(
         tools: List<Tool> = emptyList(),
         maxSteps: Int = 256,
         processingStatus: MutableStateFlow<String?> = MutableStateFlow(null),
+        conversationStartTime: LocalDateTime? = null,
         conversationSystemPrompt: String? = null,
         conversationModeInjectionIds: Set<Uuid> = emptySet(),
         conversationLorebookIds: Set<Uuid> = emptySet(),
@@ -158,6 +160,7 @@ class GenerationHandler(
                     stream = assistant.streamOutput,
                     processingStatus = processingStatus,
                     conversationSystemPrompt = conversationSystemPrompt,
+                    conversationStartTime = conversationStartTime,
                     conversationModeInjectionIds = conversationModeInjectionIds,
                     conversationLorebookIds = conversationLorebookIds,
                     workspaceCwd = workspaceCwd,
@@ -356,6 +359,7 @@ class GenerationHandler(
         memories: List<AssistantMemory>,
         stream: Boolean,
         processingStatus: MutableStateFlow<String?> = MutableStateFlow(null),
+        conversationStartTime: LocalDateTime? = null,
         conversationSystemPrompt: String? = null,
         conversationModeInjectionIds: Set<Uuid> = emptySet(),
         conversationLorebookIds: Set<Uuid> = emptySet(),
@@ -392,6 +396,7 @@ class GenerationHandler(
             model = model,
             assistant = assistant,
             settings = settings,
+            conversationStartTime = conversationStartTime,
             conversationModeInjectionIds = conversationModeInjectionIds,
             conversationLorebookIds = conversationLorebookIds,
             processingStatus = processingStatus,

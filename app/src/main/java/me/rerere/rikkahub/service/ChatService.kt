@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.update
+import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.jsonObject
 import me.rerere.ai.core.MessageRole
@@ -515,6 +516,7 @@ class ChatService(
                 },
                 assistant = assistant,
                 conversationSystemPrompt = conversation.customSystemPrompt,
+                conversationStartTime = conversation.createAt.toJavaLocalDateTime(),
                 conversationModeInjectionIds = conversation.modeInjectionIds,
                 conversationLorebookIds = conversation.lorebookIds,
                 workspaceCwd = conversation.workspaceCwd,
